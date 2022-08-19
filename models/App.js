@@ -2,11 +2,11 @@ const mongoose = require("../db/connection");
 
 const Schema = mongoose.Schema;
 
-const App = new Schema({
+const AppSchema = new Schema({
   label: {
     type: String,
     required: true,
   },
 });
 
-module.exports = mongoose.model("product", ProductSchema);
+module.exports = mongoose.model("app", AppSchema);

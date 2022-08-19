@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/App");
+const App = require("../models/App");
 
-// routes
 router.get("/", async (req, res, next) => {
   try {
     const data = await App.find({});
@@ -34,8 +33,8 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    const deletedproduct = await App.findByIdAndDelete(req.params.id);
-    res.json(deletedproduct);
+    const deletedData = await App.findByIdAndDelete(req.params.id);
+    res.json(deletedData);
   } catch (err) {
     next(err);
   }
@@ -56,5 +55,4 @@ router.patch("/:id", async (req, res, next) => {
   }
 });
 
-// export the routes
 module.exports = router;
