@@ -52,8 +52,8 @@ const computerVisionClient = new ComputerVisionClient(
       // console.log(req.file.path)
       console.log('req.file............................')
       console.log(req.file)
-      const result = await cloudinary.uploader.upload(req.file.uri);
-      // const result = await cloudinary.uploader.upload(req.file.path);
+      // const result = await cloudinary.uploader.upload(req.file.uri);
+      const result = await cloudinary.uploader.upload(req.file.path);
       const tagsURL = result.secure_url;
   
           console.log("Analyzing tags in image...", tagsURL.split("/").pop());
