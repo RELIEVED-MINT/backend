@@ -5,6 +5,7 @@ require("dotenv").config({ path: "./config/.env" });
 const multer = require("multer");
 const upload = multer({
   storage: multer.diskStorage({}),
+  limits: { fieldSize: 25 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     let ext = path.extname(file.originalname);
     if (["png", "jpg", "jpeg", "webm"].indexOf(ext) >= 0) {
@@ -51,8 +52,8 @@ const computerVisionClient = new ComputerVisionClient(
       console.log(req.file.path)
       console.log('req.file............................')
       console.log(req.file)
-      const result = await cloudinary.uploader.upload(req.file.uri);
-      // const result = await cloudinary.uploader.upload(req.file.path);
+      // const result = await cloudinary.uploader.upload(req.file.uri);
+      const result = await cloudinary.uploader.upload(req.file.path);
       const tagsURL = result.secure_url;
   
           console.log("Analyzing tags in image...", tagsURL.split("/").pop());
