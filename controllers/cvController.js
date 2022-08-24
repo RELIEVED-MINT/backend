@@ -48,8 +48,8 @@ const computerVisionClient = new ComputerVisionClient(
 
   router.post('/', upload.single("file-to-upload"), async (req, res, next) => {
       try {
-      console.log('req.file.path.......................')
-      console.log(req.file.path)
+      // console.log('req.file.path.......................')
+      // console.log(req.file.path)
       console.log('req.file............................')
       console.log(req.file)
       const result = await cloudinary.uploader.upload(req.file.uri);
