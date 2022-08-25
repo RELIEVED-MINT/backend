@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const recyclableItems = require('../data/recyclableItems.json')
 
 require("dotenv").config({ path: "./config/.env" });
 const multer = require("multer");
@@ -32,6 +33,7 @@ const https = require("https");
 const path = require("path");
 const { allowedNodeEnvironmentFlags } = require('process');
 const { addAbortSignal } = require('stream');
+const e = require("express");
 const createReadStream = require("fs").createReadStream;
 const sleep = require("util").promisify(setTimeout);
 const ComputerVisionClient =
@@ -68,7 +70,23 @@ const computerVisionClient = new ComputerVisionClient(
           .map((tag) => `${tag.name} (${tag.confidence.toFixed(2)})`)
           .join(", ");
       }
-      res.json({name: `${formatTags(tags)}}`, url: tagsURL })
+      // res.json({name: `${formatTags(tags)}}`, url: tagsURL })
+      const cvItem = {
+        recyclable: false,
+        url: tagsURL,
+        item: ''
+      }
+        tags.forEach(tag=>{
+          if (recyclableItems.indexOf(tag.name)>=0){
+            cvItem.recyclable = true
+            cvItem.item = tag.name
+          } else {
+            cvItem.item = tags[0].name
+          }
+        })
+
+
+      res.json(cvItem)
       } catch (err) {
           next(err)
       }
