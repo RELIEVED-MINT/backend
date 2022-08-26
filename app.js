@@ -9,7 +9,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+
+// FWD request to /app
+app.get("/", (req, res) => {
+  res.redirect("/app");
+});
+
 // Controllers
+const appController = require("./controllers/appController");
+app.use("/app", appController);
 
 const cvController = require("./controllers/cvController");
 app.use("/cv", cvController);
