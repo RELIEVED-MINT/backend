@@ -9,13 +9,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-
-// Redirect
-
-app.get("/", (req, res) => {
-  res.redirect("/app");
-});
-
 // Controllers
 
 const cvController = require("./controllers/cvController");
