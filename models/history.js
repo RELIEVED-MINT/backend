@@ -1,11 +1,16 @@
 const mongoose = require("../db/connection");
-
 const Schema = mongoose.Schema;
 
 const historySchema = new Schema(
   {
-    label: String,
-    image: String,
+    label: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -16,5 +21,4 @@ const historySchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("History", historySchema);
-// module.exports = historySchema;
+module.exports = historySchema;

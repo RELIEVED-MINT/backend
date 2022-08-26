@@ -1,25 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const History = require("../models/History");
+const User = require("../models/user");
 
-router.get("/", async (req, res, next) => {
-  try {
-    const data = await History.find({});
-    res.json(data);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.post("/", async (req, res, next) => {
-  try {
-    console.log(req.body);
-    const data = await History.create(req.body);
-    console.log(data);
-    res.status(200).json(data);
-  } catch (err) {
-    next(err);
-  }
+router.post("/", (req, res, next) => {
+  const historyData = req.body;
+  const userId = historyData.owner;
+  User.findById(userId)
+    .then((user) => {
+      user.history.push(historyData);
+      return user.save();
+    })
+    .then((user) => res.status(201).json({ user: user }))
+    .catch(next);
 });
 
 module.exports = router;
