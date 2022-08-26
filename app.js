@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+
 // FWD request to /app
 app.get("/", (req, res) => {
   res.redirect("/app");
