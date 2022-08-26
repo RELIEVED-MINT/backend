@@ -1,6 +1,7 @@
 [
     "aerosol",
     "aerosols",
+    "aluminum can",
     "aluminum cans",
     "book",
     "books",
@@ -23,7 +24,6 @@
     "juice cartons",
     "junk mail",
     "lids",
-    "lluminum can",
     "magazine",
     "magazines",
     "metal",
@@ -41,15 +41,16 @@
     "phonebooks",
     "pill bottle",
     "pill bottles",
-    "qhite paper",
     "steel",
+    "soft drink",
     "tin can",
     "tin cans",
     "tins",
     "tissue box",
     "tissue boxes",
     "toilet paper roll",
-    "toilet paper rolls"
+    "toilet paper rolls",
+    "white paper"
 
 
 ]
