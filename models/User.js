@@ -1,6 +1,6 @@
 const mongoose = require("../db/connection");
 const Schema = mongoose.Schema;
-const historySchema = require("./history");
+const historySchema = require("./History");
 
 const UserSchema = new Schema({
   name: {
