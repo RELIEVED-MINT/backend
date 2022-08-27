@@ -22,8 +22,11 @@ app.use("/app", appController);
 const cvController = require("./controllers/cvController");
 app.use("/cv", cvController);
 
-// const userController = require("./controllers/userController");
-// app.use("/users", userController);
+const userController = require("./controllers/userController");
+app.use("/users", userController);
+
+const historyController = require("./controllers/historyController");
+app.use("/history", historyController);
 
 app.listen(app.get("port"), () => {
   console.log(`🏃 on port: ${app.get("port")}, better catch it!`);
