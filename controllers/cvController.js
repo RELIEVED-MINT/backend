@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const recyclableItems = require('../data/recyclableItems.json')
+const recyclableItems = require("../data/recyclableItems.json");
 
 require("dotenv").config({ path: "./config/.env" });
 const multer = require("multer");
@@ -31,8 +31,8 @@ const async = require("async");
 const fs = require("fs");
 const https = require("https");
 const path = require("path");
-const { allowedNodeEnvironmentFlags } = require('process');
-const { addAbortSignal } = require('stream');
+const { allowedNodeEnvironmentFlags } = require("process");
+const { addAbortSignal } = require("stream");
 const e = require("express");
 const createReadStream = require("fs").createReadStream;
 const sleep = require("util").promisify(setTimeout);
@@ -44,52 +44,51 @@ const endpoint = process.env.MS_COMPUTER_VISION_ENDPOINT;
 // const faceEndpoint = process.env.MS_FACE_ENDPOINT;
 // const subscriptionKey = process.env.MS_FACE_SUB_KEY;
 const computerVisionClient = new ComputerVisionClient(
-    new ApiKeyCredentials({ inHeader: { "Ocp-Apim-Subscription-Key": key } }),
-    endpoint
-  );
+  new ApiKeyCredentials({ inHeader: { "Ocp-Apim-Subscription-Key": key } }),
+  endpoint
+);
 
-  router.post('/', upload.single("file-to-upload"), async (req, res, next) => {
-      try {
-      // console.log('req.file.path.......................')
-      // console.log(req.file.path)
-      console.log('req.file............................')
-      console.log(req.file)
-      // const result = await cloudinary.uploader.upload(req.file.uri);
-      const result = await cloudinary.uploader.upload(req.file.path);
-      const tagsURL = result.secure_url;
-  
-          console.log("Analyzing tags in image...", tagsURL.split("/").pop());
-      const tags = (
-        await computerVisionClient.analyzeImage(tagsURL, {
-          visualFeatures: ["Tags"],
-        })
-      ).tags;
-      console.log(`Tags: ${formatTags(tags)}`);
-      function formatTags(tags) {
-          return tags
-          .map((tag) => `${tag.name} (${tag.confidence.toFixed(2)})`)
-          .join(", ");
+router.post("/", upload.single("file-to-upload"), async (req, res, next) => {
+  try {
+    // console.log('req.file.path.......................')
+    // console.log(req.file.path)
+    console.log("req.file............................");
+    console.log(req.file);
+    // const result = await cloudinary.uploader.upload(req.file.uri);
+    const result = await cloudinary.uploader.upload(req.file.path);
+    const tagsURL = result.secure_url;
+
+    console.log("Analyzing tags in image...", tagsURL.split("/").pop());
+    const tags = (
+      await computerVisionClient.analyzeImage(tagsURL, {
+        visualFeatures: ["Tags"],
+      })
+    ).tags;
+    console.log(`Tags: ${formatTags(tags)}`);
+    function formatTags(tags) {
+      return tags
+        .map((tag) => `${tag.name} (${tag.confidence.toFixed(2)})`)
+        .join(", ");
+    }
+    // res.json({name: `${formatTags(tags)}}`, url: tagsURL })
+    const cvItem = {
+      recyclable: false,
+      url: tagsURL,
+      item: "",
+    };
+    tags.forEach((tag) => {
+      if (recyclableItems.indexOf(tag.name) >= 0) {
+        cvItem.recyclable = true;
+        cvItem.item = tag.name;
+      } else {
+        cvItem.item = tags[0].name;
       }
-      // res.json({name: `${formatTags(tags)}}`, url: tagsURL })
-      const cvItem = {
-        recyclable: false,
-        url: tagsURL,
-        item: ''
-      }
-        tags.forEach(tag=>{
-          if (recyclableItems.indexOf(tag.name)>=0){
-            cvItem.recyclable = true
-            cvItem.item = tag.name
-          } else {
-            cvItem.item = tags[0].name
-          }
-        })
+    });
 
+    res.json(cvItem);
+  } catch (err) {
+    next(err);
+  }
+});
 
-      res.json(cvItem)
-      } catch (err) {
-          next(err)
-      }
-  })
-
-  module.exports = router
+module.exports = router;
