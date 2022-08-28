@@ -11,7 +11,8 @@ const historySchema = new Schema(
       type: String,
       required: true,
     },
-    recycable: Boolean,
+    recyclable: Boolean,
+    //previously recycable
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
