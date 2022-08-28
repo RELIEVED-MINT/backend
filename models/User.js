@@ -3,7 +3,15 @@ const Schema = mongoose.Schema;
 const historySchema = require("./History");
 
 const UserSchema = new Schema({
-  name: {
+  firstname: {
+    type: String,
+    required: true,
+  },
+  lastname: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },
