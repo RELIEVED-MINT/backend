@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const recyclableItems = require("../data/recyclableItems.json");
+const bannedWords = require("../data/bannedWords.json");
 require("dotenv").config({ path: "./config/.env" });
 const multer = require("multer");
 const upload = multer({
@@ -98,7 +99,9 @@ router.post("/", upload.single("file-to-upload"), async (req, res, next) => {
         recyclableItems.includes(tag.name)
       )[0].name;
     } else {
-      cvItem.item = tags[0].name;
+      cvItem.item = tags.filter(
+        (tag) => bannedWords.indexOf(tag.name) === -1
+      )[0].name;
     }
 
     res.json(cvItem);
