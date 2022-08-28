@@ -17,8 +17,8 @@ router.post("/", requireToken, (req, res, next) => {
 
 //destroy
 // delete /history/:id
-router.delete("/:id", requireToken, (req, res, next) => {
-  const id = req.params.id;
+router.delete("/", requireToken, (req, res, next) => {
+  const { id } = req.body;
   User.findOne({ "reviews._id": id })
     .then((user) => {
       user.history.id(id).remove();
