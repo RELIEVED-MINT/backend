@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const recyclableItems = require("../data/recyclableItems.json");
-
 require("dotenv").config({ path: "./config/.env" });
 const multer = require("multer");
 const upload = multer({
@@ -75,15 +74,32 @@ router.post("/", upload.single("file-to-upload"), async (req, res, next) => {
       recyclable: false,
       url: tagsURL,
       item: "",
+      analysis: formatTags(tags),
     };
+    // tags.forEach((tag) => {
+    //   if (recyclableItems.includes(tag.name)) {
+    //     cvItem.recyclable = true;
+    //     if (bannedWords.includes(cvItem.item)) {
+    //     } else {
+    //       cvItem.item = tag.name;
+    //     }
+    //   } else {
+    //     cvItem.item = tags[0].name;
+    //   }
+    // });
     tags.forEach((tag) => {
-      if (recyclableItems.indexOf(tag.name) >= 0) {
+      if (recyclableItems.includes(tag.name)) {
         cvItem.recyclable = true;
-        cvItem.item = tag.name;
-      } else {
-        cvItem.item = tags[0].name;
       }
     });
+
+    if (cvItem.recyclable === true) {
+      cvItem.item = tags.filter((tag) =>
+        recyclableItems.includes(tag.name)
+      )[0].name;
+    } else {
+      cvItem.item = tags[0].name;
+    }
 
     res.json(cvItem);
   } catch (err) {
