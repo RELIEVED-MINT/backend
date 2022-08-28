@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-
+const { requireToken } = require("../middleware/auth");
 //create
-router.post("/", (req, res, next) => {
+router.post("/", requireToken, (req, res, next) => {
   const historyData = req.body;
   const userId = historyData.owner;
   User.findById(userId)
@@ -17,7 +17,7 @@ router.post("/", (req, res, next) => {
 
 //destroy
 // delete /history/:id
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", requireToken, (req, res, next) => {
   const id = req.params.id;
   User.findOne({ "reviews._id": id })
     .then((user) => {

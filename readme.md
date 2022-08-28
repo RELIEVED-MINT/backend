@@ -8,4 +8,6 @@
 - Mongoose
 - MongoDB
 - Cors
-- dotEnv
+- dotEnv (Environment variables)
+- bcrpt (User authentication)
+- passport, passport-jwt, jsonwebtoken

@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
+const { requireToken } = require("../middleware/auth");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -11,7 +13,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", requireToken, async (req, res, next) => {
   try {
     const data = await User.findById(req.params.id);
     res.json(data);
@@ -35,13 +37,33 @@ router.get("/:id", async (req, res, next) => {
   .catch(next)
 }) */
 
-router.post("/", async (req, res, next) => {
+// /users/signup
+router.post("/signup", async (req, res, next) => {
   try {
-    const data = await User.create(req.body);
-    res.status(200).json(data);
+    const password = await bcrypt.hash(req.body.password, 10);
+    const user = await User.create({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      email: req.body.email,
+      password,
+    });
+    res.status(201).json(user);
   } catch (err) {
     next(err);
   }
+});
+
+const { createUserToken } = require("../middleware/auth");
+// /users/signin
+router.post("/signin", (req, res, next) => {
+  User.findOne({ email: req.body.email })
+    // Pass the user and the request to createUserToken
+    .then((user) => createUserToken(req, user))
+    // createUserToken will either throw an error that
+    // will be caught by our error handler or send back
+    // a token that we'll in turn send to the client.
+    .then((token) => res.json({ token }))
+    .catch(next);
 });
 
 router.delete("/:id", async (req, res, next) => {
