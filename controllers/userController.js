@@ -22,21 +22,6 @@ router.get("/:id", requireToken, async (req, res, next) => {
   }
 });
 
-/* router.post('/', (req, res, next) => {
-  bcrypt 
-  .hash(req.body.password, 10)
-  .then(hash =>
-      ({
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
-          email: req.body.email,
-          password: hash,
-      }))
-  .then(user => User.create(user))
-  .then(user => res.status(201).json(user))
-  .catch(next)
-}) */
-
 // /users/signup
 router.post("/signup", async (req, res, next) => {
   try {
@@ -55,15 +40,10 @@ router.post("/signup", async (req, res, next) => {
 
 const { createUserToken } = require("../middleware/auth");
 // /users/signin
-router.post("/signin", (req, res, next) => {
-  User.findOne({ email: req.body.email })
-    // Pass the user and the request to createUserToken
-    .then((user) => createUserToken(req, user))
-    // createUserToken will either throw an error that
-    // will be caught by our error handler or send back
-    // a token that we'll in turn send to the client.
-    .then((token) => res.json({ token }))
-    .catch(next);
+router.post("/signin", async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  const token = createUserToken(req, user);
+  res.json({ token, id: user.id });
 });
 
 router.delete("/:id", async (req, res, next) => {
