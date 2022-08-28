@@ -20,11 +20,24 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+/* router.post('/', (req, res, next) => {
+  bcrypt 
+  .hash(req.body.password, 10)
+  .then(hash =>
+      ({
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          email: req.body.email,
+          password: hash,
+      }))
+  .then(user => User.create(user))
+  .then(user => res.status(201).json(user))
+  .catch(next)
+}) */
+
 router.post("/", async (req, res, next) => {
   try {
-    console.log(req.body);
     const data = await User.create(req.body);
-    console.log(data);
     res.status(200).json(data);
   } catch (err) {
     next(err);
