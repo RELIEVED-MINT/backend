@@ -4,12 +4,15 @@ const app = express();
 const cors = require("cors");
 app.set("port", process.env.PORT || PORT);
 
-// Middleware
+// Express Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+// Debugger Log Middleware
+const requestLogger = require("./middleware/request_logger");
+app.use(requestLogger);
 
-// FWD request to /app
+// Forward request to /app
 app.get("/", (req, res) => {
   res.send("Welcome to the recyclr app");
 });
